@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from distutils.log import error
 from importlib import import_module
 import string
@@ -25,11 +26,15 @@ def index():
             shortened_url=key_generator()
         )
         current_app.db.url_database.insert_one(asdict(url_data))
-
+        return render_template(
+            template_name_or_list="index.html",
+            url_form=url_form,
+            given_link=f"http://127.0.0.1:5000/{url_data.shortened_url}")
+        
     return render_template(
-        template_name_or_list="index.html",
+        template_name_or_list='index.html',
         url_form=url_form,
-        given_link=f"http://127.0.0.1:5000/{url_data.shortened_url}"
+        given_link=NULL,
     )
 
 
@@ -51,4 +56,4 @@ def redirect_func(url_id: string):
 
     return render_template(
         template_name_or_list="error_404.html",
-        error="The link doesn't exist")
+        error="The link doesn't exist",)
